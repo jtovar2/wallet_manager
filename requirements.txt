@@ -2,3 +2,5 @@ PyJWT
 virtualenv
 flask
 gunicorn
+pycrypto
+cryptography

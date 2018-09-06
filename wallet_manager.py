@@ -4,6 +4,11 @@ import jwt
 import subprocess
 import os
 
+#for GAE do this shit
+#from jwt.contrib.algorithms.pycrypto import RSAAlgorithm
+#jwt.register_algorithm('RS256', RSAAlgorithm(RSAAlgorithm.SHA256))
+
+
 application = Flask(__name__)
 LCP = os.environ['LCP']
 
