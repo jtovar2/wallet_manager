@@ -4,7 +4,7 @@ import jwt
 import subprocess
 import os
 
-app = Flask(__name__)
+application = Flask(__name__)
 LCP = os.environ['LCP']
 PUBLIC_ENCRYPTION_KEY = os.environ['ENCRYPTION_KEY']
 
@@ -22,7 +22,7 @@ supported_actions = ['getbalance','getnewaddress', 'move', 'sendfrom', 'gettrans
 
 
 
-@app.route(final_route_string, methods=['POST'])
+@application.route(final_route_string, methods=['POST'])
 def command_line_executer():
         encrypted_request_string = request.data
 
@@ -44,3 +44,6 @@ def command_line_executer():
 
         else:
             abort(404, 'malformed request')
+
+if __name__ == "__main__":
+    application.run(host='0.0.0.0')
