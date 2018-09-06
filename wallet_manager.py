@@ -6,8 +6,12 @@ import os
 
 application = Flask(__name__)
 LCP = os.environ['LCP']
-PUBLIC_ENCRYPTION_KEY = os.environ['ENCRYPTION_KEY']
 
+WALLET_MANAGER_PUBLIC_KEY = None
+public_key_file_path = os.environ['WALLET_MANAGER_PUBLIC_KEY_PATH']
+
+with open(public_key_file_path, 'r') as public_key_file:
+        WALLET_MANAGER_PUBLIC_KEY = public_key_file.read()
 
 final_route_string = '/crypto_cli'
 
@@ -26,7 +30,7 @@ supported_actions = ['getbalance','getnewaddress', 'move', 'sendfrom', 'gettrans
 def command_line_executer():
         encrypted_request_string = request.data
 
-        json_dict = jwt.decode( encrypted_request_string, PUBLIC_ENCRYPTION_KEY, algorithm='HS256')
+        json_dict = jwt.decode( encrypted_request_string, WALLET_MANAGER_PUBLIC_KEY, algorithm='RS256')
 
 
         currency = json_dict['currency']
