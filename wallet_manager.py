@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, abort
 import json
 import jwt
 import subprocess
@@ -33,17 +33,23 @@ supported_actions = ['getbalance','getnewaddress', 'move', 'sendfrom', 'gettrans
 
 @application.route(final_route_string, methods=['POST'])
 def command_line_executer():
-        encrypted_request_string = request.data
+        encrypted_request_string = request.get_data()
 
         json_dict = jwt.decode( encrypted_request_string, WALLET_MANAGER_PUBLIC_KEY, algorithm='RS256')
 
 
         currency = json_dict['currency']
         action = json_dict['action']
-        account = json_dict['account']
+        command = None
 
         if action not in supported_actions:
             return abort(403,'action not supported')
+
+        if currency is not None or action is not None and account is not None or currency != ""or action != "" or account != "":
+            command = supported_currencies_to_exec_map[ currency ]
+
+        else:
+            abort(404, 'malformed request')
 
 
         shell_command_format = []
@@ -66,19 +72,32 @@ def command_line_executer():
                 return abort(403,'amount not in request')
             else:
                 amount = json_dict['amount']
+
+            shell_command_format = [command, action, account, to_acct, amount]
+            if 'comment' in json_dict and json_dict['comment'] != "":
+		comment = json_dict['comment']
+		shell_command_format.append(comment)
+
         if action in ['gettransaction']:
+            txn_id = None
+            if 'account' not in json_dict or json_dict['account'] == "":
+                return abort(403,'account not in request')
+            else:
+                account = json_dict['account']
+            shell_command_format = [command, action,txn_id]
             ##cehck for vars and format command
-        if actin in ['getbalance', 'getnewaddress']:
-            ###check for vars and format command
+        if action in ['getbalance', 'getnewaddress']:
+            account = None
+            if 'account' not in json_dict or json_dict['account'] == "":
+                return abort(403,'account not in request')
+            else:
+                account = json_dict['account']
+            shell_command_format = [command, action,account]
 
-        if currency is not None or action is not None and account is not None or currency != ""or action != "" or account != "":
-            command = supported_currencies_to_exec_map[ currency ]
-            response = subprocess.check_output([command, action, account])
             
-            return str(response)
+        response = subprocess.check_output(shell_command_format)
+        return str(response)
 
-        else:
-            abort(404, 'malformed request')
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0')
