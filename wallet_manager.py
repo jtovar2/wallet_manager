@@ -45,6 +45,32 @@ def command_line_executer():
         if action not in supported_actions:
             return abort(403,'action not supported')
 
+
+        shell_command_format = []
+        if action in ['move', 'sendfrom']:
+            account = None
+            to_acct = None
+            amount = None
+            comment = None
+
+            if 'account' not in json_dict or json_dict['account'] == "":
+                return abort(403,'account not in request')
+            else:
+                account = json_dict['account']
+            if 'to_acct' not in json_dict or json_dict['to_acct'] == "":
+                return abort(403,'to_acct not in request')
+            else:
+                to_acct = json_dict['to_acct']
+            ##check for vars and format command
+            if 'amount' not in json_dict or json_dict['amount'] == "":
+                return abort(403,'amount not in request')
+            else:
+                amount = json_dict['amount']
+        if action in ['gettransaction']:
+            ##cehck for vars and format command
+        if actin in ['getbalance', 'getnewaddress']:
+            ###check for vars and format command
+
         if currency is not None or action is not None and account is not None or currency != ""or action != "" or account != "":
             command = supported_currencies_to_exec_map[ currency ]
             response = subprocess.check_output([command, action, account])
