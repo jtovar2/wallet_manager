@@ -4,3 +4,9 @@ flask
 gunicorn
 pycrypto
 cryptography
+google-auth
+google-cloud-core
+google-cloud-datastore
+google-cloud-storage
+google-cloud-vision
+textract
