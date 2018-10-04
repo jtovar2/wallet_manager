@@ -1,4 +1,4 @@
-from oauth2client.client import GoogleCredentials
+#from oauth2client.client import GoogleCredentials
 from google.cloud import datastore
 from os import path
 from google.auth import app_engine
@@ -31,7 +31,7 @@ class DatastoreManager(object):
 
         if self.lcp == 'dev':
             credentials = None
-            credentials = GoogleCredentials.get_application_default()
+            #credentials = GoogleCredentials.get_application_default()
             credentials, project = google.auth.default()
 
             '''from google.oauth2 import service_account
