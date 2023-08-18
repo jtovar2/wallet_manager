@@ -4,7 +4,6 @@ import jwt
 import subprocess
 import os
 
-import datastore_manager
 
 #for GAE do this shit
 #from jwt.contrib.algorithms.pycrypto import RSAAlgorithm
