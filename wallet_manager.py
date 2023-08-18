@@ -5,10 +5,6 @@ import subprocess
 import os
 
 
-#for GAE do this shit
-#from jwt.contrib.algorithms.pycrypto import RSAAlgorithm
-#jwt.register_algorithm('RS256', RSAAlgorithm(RSAAlgorithm.SHA256))
-
 
 application = Flask(__name__)
 LCP = os.environ['LCP']
@@ -24,13 +20,16 @@ crypto_wallet_route_string = '/crypto_cli'
 supported_currencies_to_exec_map = {}
 
 
-supported_currencies_to_exec_map['dogecoin'] = '/home/javilin93/dogecoin-1.14.6/bin/dogecoin-cli'
+supported_currencies_to_exec_map['dogecoin'] = '/usr/bin/dogecoin-cli -conf=/etc/dogecoin/dogecoin.conf '
 
 supported_actions = ['getbalance','getnewaddress', 'move', 'sendfrom', 'gettransaction']
 
 
 
 
+@application.route("/")
+def command_line_executer2():
+    return "HELLO WORLD"
 
 @application.route(crypto_wallet_route_string, methods=['POST'])
 def command_line_executer():
@@ -101,4 +100,4 @@ def command_line_executer():
 
 
 if __name__ == "__main__":
-    application.run(host='0.0.0.0')
+    application.run(host='0.0.0.0',debug=True, port=8080)

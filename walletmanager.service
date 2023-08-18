@@ -1,0 +1,13 @@
+[Unit]
+Description=Prediction service
+After=network.target
+
+[Service]
+User=javilin93
+WorkingDirectory=/home/javier/git/wallet_manager
+Environment= WALLET_MANAGER_PUBLIC_KEY_PATH=/home/javier/git/wallet_manager/secrets/wallet_manager_key.pub PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+ExecStart=python3 wallet_manager.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
