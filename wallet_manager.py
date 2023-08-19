@@ -91,7 +91,7 @@ def command_line_executer():
             shell_command_format = [command[0], command[1], action,account]
 
             
-        response = subprocess.check_output(shell_command_format)
+        response = subprocess.run(shell_command_format, check=True,capture_output=True, text=True).stdout
         return str(response)
 
 
