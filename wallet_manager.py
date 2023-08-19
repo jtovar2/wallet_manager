@@ -36,7 +36,7 @@ supported_actions = ['getbalance','getnewaddress', 'move', 'sendfrom', 'gettrans
 def command_line_executer():
         encrypted_request_string = request.get_data()
 
-        json_dict = jwt.decode( encrypted_request_string, WALLET_MANAGER_PUBLIC_KEY, algorithm='RS256')
+        json_dict = jwt.decode( encrypted_request_string, "heyy", algorithm='HS256')
 
 
         currency = json_dict['currency']
