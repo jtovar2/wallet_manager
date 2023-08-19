@@ -1,11 +1,11 @@
 [Unit]
-Description=Prediction service
+Description=Wallet Manager
 After=network.target
 
 [Service]
-User=javilin93
+User=javier
 WorkingDirectory=/home/javier/git/wallet_manager
-Environment= WALLET_MANAGER_PUBLIC_KEY_PATH=/home/javier/git/wallet_manager/secrets/wallet_manager_key.pub PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+Environment= WALLET_MANAGER_SECRET=fuckyouuu PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 ExecStart=python3 wallet_manager.py
 Restart=always
 

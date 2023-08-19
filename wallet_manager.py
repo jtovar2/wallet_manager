@@ -7,20 +7,16 @@ import os
 
 
 application = Flask(__name__)
-LCP = os.environ['LCP']
 
-WALLET_MANAGER_PUBLIC_KEY = None
-public_key_file_path = os.environ['WALLET_MANAGER_PUBLIC_KEY_PATH']
+wallet_manager_secret = os.environ['WALLET_MANAGER_SECRET']
 
-with open(public_key_file_path, 'r') as public_key_file:
-        WALLET_MANAGER_PUBLIC_KEY = public_key_file.read()
 
 crypto_wallet_route_string = '/crypto_cli'
 
 supported_currencies_to_exec_map = {}
 
 
-supported_currencies_to_exec_map['dogecoin'] = '/usr/bin/dogecoin-cli -conf=/etc/dogecoin/dogecoin.conf '
+supported_currencies_to_exec_map['dogecoin'] = ['dogecoin-cli',  '-conf=/etc/dogecoin/dogecoin.conf']
 
 supported_actions = ['getbalance','getnewaddress', 'move', 'sendfrom', 'gettransaction']
 
@@ -35,7 +31,7 @@ def command_line_executer2():
 def command_line_executer():
         encrypted_request_string = request.get_data()
 
-        json_dict = jwt.decode( encrypted_request_string, WALLET_MANAGER_PUBLIC_KEY, algorithm='RS256')
+        json_dict = jwt.decode( encrypted_request_string, wallet_manager_secret, algorithms='HS256')
 
 
         currency = json_dict['currency']
@@ -73,10 +69,10 @@ def command_line_executer():
             else:
                 amount = json_dict['amount']
 
-            shell_command_format = [command, action, account, to_acct, amount]
+            shell_command_format = [command[0], command[1], action, account, to_acct, amount]
             if 'comment' in json_dict and json_dict['comment'] != "":
-		comment = json_dict['comment']
-		shell_command_format.append(comment)
+                comment = json_dict['comment']
+                shell_command_format.append(comment)
 
         if action in ['gettransaction']:
             txn_id = None
@@ -84,7 +80,7 @@ def command_line_executer():
                 return abort(403,'account not in request')
             else:
                 account = json_dict['account']
-            shell_command_format = [command, action,txn_id]
+            shell_command_format = [command[0], command[1], action,txn_id]
             ##cehck for vars and format command
         if action in ['getbalance', 'getnewaddress']:
             account = None
@@ -92,7 +88,7 @@ def command_line_executer():
                 return abort(403,'account not in request')
             else:
                 account = json_dict['account']
-            shell_command_format = [command, action,account]
+            shell_command_format = [command[0], command[1], action,account]
 
             
         response = subprocess.check_output(shell_command_format)
