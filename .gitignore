@@ -2,3 +2,4 @@
 *.sock
 v_env/
 nohup.out
+secrets
