@@ -61,7 +61,7 @@ def command_line_executer():
                 return abort(403,'amount not in request')
             else:
                 amount = json_dict['amount']
-            shell_command_format = [command[0], command[1], action,to_acct, amount,":)", "subtractfeefromamount=true"]
+            shell_command_format = [command[0], command[1], action,to_acct, amount,"\":)\"","\":)\"", "true"]
         if action in ['move', 'sendfrom']:
             account = None
             to_acct = None
