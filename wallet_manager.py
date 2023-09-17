@@ -18,7 +18,7 @@ supported_currencies_to_exec_map = {}
 
 supported_currencies_to_exec_map['dogecoin'] = ['dogecoin-cli',  '-conf=/etc/dogecoin/dogecoin.conf']
 
-supported_actions = ['getbalance','getnewaddress', 'move', 'sendfrom', 'gettransaction']
+supported_actions = ['getbalance','getnewaddress', 'move', 'sendfrom', 'gettransaction', 'sendtoaddress']
 
 
 
@@ -49,6 +49,19 @@ def command_line_executer():
 
 
         shell_command_format = []
+
+        if action in ['sendtoaddress']:
+           to_acct = None
+            amount = None
+            if 'to_acct' not in json_dict or json_dict['to_acct'] == "":
+                return abort(403,'to_acct not in request')
+            else:
+                to_acct = json_dict['to_acct']
+            if 'amount' not in json_dict or json_dict['amount'] == "":
+                return abort(403,'amount not in request')
+            else:
+                amount = json_dict['amount']
+            shell_command_format = [command[0], command[1], action,to_acct, amount, "subtractfeefromamount=true"]
         if action in ['move', 'sendfrom']:
             account = None
             to_acct = None
