@@ -51,7 +51,7 @@ def command_line_executer():
         shell_command_format = []
 
         if action in ['sendtoaddress']:
-           to_acct = None
+            to_acct = None
             amount = None
             if 'to_acct' not in json_dict or json_dict['to_acct'] == "":
                 return abort(403,'to_acct not in request')
