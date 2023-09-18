@@ -89,10 +89,10 @@ def command_line_executer():
 
         if action in ['gettransaction']:
             txn_id = None
-            if 'account' not in json_dict or json_dict['account'] == "":
-                return abort(403,'account not in request')
+            if 'txn_id' not in json_dict or json_dict['txn_id'] == "":
+                return abort(403,'txn_id not in request')
             else:
-                account = json_dict['account']
+                txn_id = json_dict['txn_id']
             shell_command_format = [command[0], command[1], action,txn_id]
             ##cehck for vars and format command
         if action in ['getbalance', 'getnewaddress']:
